@@ -1,0 +1,108 @@
+<div class="container">
+  <h3 class="component-header col-12">
+    Document classifications
+    <button type="button" class="btn custom-btn small-btn" data-toggle="modal" data-target="#EditDocumentClassification"
+            (click)="addDocumentClassification()" style="float: right;">Add new classification
+    </button>
+  </h3>
+  <div class="col-12">
+    <form class="form-inline filter-section">
+      <div class="form-group">
+        <label>Filter:&nbsp;</label>
+        <select class="form-control form-control-sm" name="DocumentClassificationFilterStatus"
+                #DocumentClassificationFilterStatus
+                (change)="filterDocumentClassificationsByStatus(DocumentClassificationFilterStatus.value)">
+          <option value="">All Classifications</option>
+          <option value="ACTIVE">Active Classifications</option>
+          <option value="NOT_ACTIVE">Not Active Classifications</option>
+        </select>
+      </div>
+    </form>
+    <div class="col-12 no-padding custom-table-box">
+      <table class="table table-responsive table-hover custom-table">
+        <thead class="thead-default">
+        <tr>
+          <th>Document Name</th>
+          <th>Document Type</th>
+          <th>Classification</th>
+          <th>Sub Classification</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let documentClassification of (allDocumentClassifications | documentClassificationFilter: documentClassificationStatusFilter)">
+          <td>{{documentClassification.docName}}</td>
+          <td>{{documentClassification.docType}}</td>
+          <td>{{documentClassification.classification}}</td>
+          <td>{{documentClassification.subClassification}}</td>
+          <td>
+            <span class="badge badge-success" *ngIf="documentClassification.active">Active</span>
+            <span class="badge badge-secondary" *ngIf="!documentClassification.active">Not active</span>
+          </td>
+          <td>
+            <button type="button" data-toggle="modal" data-target="#EditDocumentClassification"
+                    (click)="readDocumentClassificationData(documentClassification.id)"
+                    class="btn btn-light small-btn" title="Edit documentClassification">
+              <span class="fa fa-edit"></span>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!(allDocumentClassifications | documentClassificationFilter: documentClassificationStatusFilter).length">
+          <td colspan="6" class="empty-table-td">No results!</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditDocumentClassification">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ documentClassificationEditMode ? 'Edit': 'Add New'}} Document Classification</h5>
+      </div>
+      <div class="modal-body">
+        <form class="row no-side-margin" [formGroup]="documentClassificationForm" novalidate
+              (ngSubmit)="saveDocumentClassification(documentClassificationForm.value)">
+          <div class="col-12 col-md-6 form-group">
+            <label>Document Name</label>
+            <input class="form-control" type="text" formControlName="docName"
+                   required/>
+          </div>
+          <div class="col-12 col-md-6 form-group">
+            <label>Document Type</label>
+            <input class="form-control" type="text" formControlName="docType"
+                   required/>
+          </div>
+          <div class="col-12 col-md-6 form-group">
+            <label>Classification</label>
+            <input class="form-control" type="text" formControlName="classification"
+                   required/>
+          </div>
+          <div class="col-12 col-md-6 form-group">
+            <label>Sub Classification</label>
+            <input class="form-control" type="text" formControlName="subClassification"
+                   required/>
+          </div>
+          <div class="col-12 col-md-6 form-group">
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" name="DocumentClassificationStatus"
+                     formControlName="active">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">Activate document classification</span>
+            </label>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn custom-btn" [disabled]="documentClassificationForm.invalid">Save</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal" (click)="resetDocumentClassificationForm()">
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  height: 100vh;
+  background: #776eb1;
+  background: linear-gradient(#776eb1, #d9adc8)
+}
+
+.no-side-margin {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.no-padding{
+  padding: 0 !important;
+}
+

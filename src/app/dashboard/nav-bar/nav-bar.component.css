@@ -1,0 +1,47 @@
+.custom-nav-bar{
+  background-color: #293c58;
+}
+
+.custom-nav-icon{
+  font-size: 35px;
+  color: #dc3545;
+  border: none;
+}
+
+.custom-nav-brand {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 16px;
+  display: inline-block;
+}
+
+.custom-nav-item{
+}
+
+.custom-nav-item a{
+  color: #fff !important;
+  border-bottom: 3px solid transparent;
+}
+
+.custom-nav-item a:hover, .routeLinkActive{
+  border-bottom-color: #dc3545 !important;
+}
+
+.logout-btn{
+  position: absolute;
+  right: 10px;
+}
+
+@media screen and (max-width: 992px) {
+  .custom-nav-item{
+    padding: 0px 10px;
+  }
+
+  .logout-btn{
+    position: relative;
+    right: 0px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+}

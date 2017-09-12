@@ -1,0 +1,138 @@
+<div class="container">
+  <h3 class="component-header">User DIDs</h3>
+  <div class="row no-side-margin">
+    <div class="col-12">
+      <div class="col-12 no-padding custom-accordian-box" id="userDidsAccordion" did="tablist">
+        <div class="card" *ngFor="let user of allUserDids; let i=index">
+          <div class="card-header" did="tab" id="UserDid_{{i}}">
+            <h5 class="mb-0">
+              <a class="collapsed" class="accordian-link" data-toggle="collapse" href="#collapseUserDid_{{i}}"
+                 aria-expanded="false" [attr.aria-controls]="'collapseUserDid_'+i">
+                {{user.userName}}
+              </a>
+              <button type="button" data-toggle="modal" data-target="#EditUserDids" class="btn btn-light small-btn" title="Edit user dids" (click)="editUserDids(user)" style="float: right">
+                <span class="fa fa-edit"></span>
+              </button>
+            </h5>
+          </div>
+          <div id="collapseUserDid_{{i}}" class="collapse" [class.show]="i==0" did="tabpanel"
+               [attr.aria-labelledby]="'UserDid_'+i" data-parent="#userDidsAccordion">
+            <div class="card-body">
+              <h6 class="col-12 no-padding">All DIDs:</h6>
+              <table class="table table-responsive table-bordered">
+                <thead class="thead-default">
+                <tr>
+                  <th>DID Number</th>
+                  <th>DID Type</th>
+                  <th>Target Type</th>
+                  <th>Forward To</th>
+                  <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let dial of user.userHasDIDVoList">
+                  <td>{{dial.directInwardNumber ? dial.directInwardNumber : 'N/A'}}</td>
+                  <td>{{dial.directInwardDialingType ? dial.directInwardDialingType : 'N/A'}}</td>
+                  <td>{{dial.targetType ? dial.targetType : 'N/A'}}</td>
+                  <td>{{dial.forwardToNumber ? dial.forwardToNumber : 'N/A'}}</td>
+                  <td>
+                    <span class="badge badge-success" *ngIf="dial.active">Active</span>
+                    <span class="badge badge-secondary" *ngIf="!dial.active">Not active</span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditUserDids">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit User dids</h5>
+      </div>
+      <div class="modal-body" *ngIf="selectedUser">
+        <div class="row no-side-margin">
+          <form class="col-12" novalidate>
+            <div class="form-group">
+              <label>User name</label>
+              <input class="form-control" type="text" [value]="selectedUser.userName" #DidName readonly/>
+            </div>
+            <h6>Existing dids</h6>
+            <div class="form-group">
+              <small *ngIf="!selectedUser.userHasDIDVoList.length">No dids!</small>
+              <table class="table table-responsive table-bordered" *ngIf="selectedUser.userHasDIDVoList.length">
+                <thead class="thead-default">
+                <tr>
+                  <th>DID Number</th>
+                  <th>DID Type</th>
+                  <th>Target Type</th>
+                  <th>Forward To</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let dial of selectedUser.userHasDIDVoList">
+                  <td>{{dial.directInwardNumber ? dial.directInwardNumber : 'N/A'}}</td>
+                  <td>{{dial.directInwardDialingType ? dial.directInwardDialingType : 'N/A'}}</td>
+                  <td>{{dial.targetType ? dial.targetType : 'N/A'}}</td>
+                  <td>{{dial.forwardToNumber ? dial.forwardToNumber : 'N/A'}}</td>
+                  <td>
+                    <span class="badge badge-success" *ngIf="dial.active">Active</span>
+                    <span class="badge badge-secondary" *ngIf="!dial.active">Not active</span>
+                  </td>
+                  <td>
+                    <button class="text-btn delete-text-btn" (click)="removeDid(dial)">
+                      <i class="fa fa-window-close" aria-hidden="true"></i> Remove
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <h6 *ngIf="remainingDids.length">Add more dids: </h6>
+            <div class="form-group">
+              <table class="table table-responsive table-bordered" *ngIf="remainingDids.length">
+                <thead class="thead-default">
+                <tr>
+                  <th>DID Number</th>
+                  <th>DID Type</th>
+                  <th>Target Type</th>
+                  <th>Forward To</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let dial of remainingDids">
+                  <td>{{dial.directInwardNumber ? dial.directInwardNumber : 'N/A'}}</td>
+                  <td>{{dial.directInwardDialingType ? dial.directInwardDialingType : 'N/A'}}</td>
+                  <td>{{dial.targetType ? dial.targetType : 'N/A'}}</td>
+                  <td>{{dial.forwardToNumber ? dial.forwardToNumber : 'N/A'}}</td>
+                  <td>
+                    <span class="badge badge-success" *ngIf="dial.active">Active</span>
+                    <span class="badge badge-secondary" *ngIf="!dial.active">Not active</span>
+                  </td>
+                  <td>
+                    <button class="text-btn success-text-btn" (click)="addDid(dial)">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <button type="submit" class="btn custom-btn" (click)="saveUserDids(selectedUser)">Save</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal" >Close</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

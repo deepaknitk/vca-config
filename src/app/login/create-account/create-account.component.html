@@ -1,0 +1,15 @@
+<form class="row no-side-margin login-form" (submit)="createAccount()">
+  <div class="input-group login-input">
+    <div class="input-group-addon"><span class="fa fa-user"></span></div>
+    <input type="text" class="form-control" placeholder="Username" name="Username" [(ngModel)]="Username">
+  </div>
+  <div class="input-group login-input">
+    <div class="input-group-addon"><span class="fa fa-lock"></span></div>
+    <input type="password" class="form-control" placeholder="Password" name="Password" [(ngModel)]="Password">
+  </div>
+  <div class="input-group login-input">
+    <div class="input-group-addon"><span class="fa fa-lock"></span></div>
+    <input type="password" class="form-control" placeholder="Confirm Password" name="ConfirmPassword" [(ngModel)]="ConfirmPassword">
+  </div>
+  <button type="submit" class="btn login-btn">Create</button>
+</form>

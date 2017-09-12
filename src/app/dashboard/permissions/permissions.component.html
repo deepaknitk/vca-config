@@ -1,0 +1,82 @@
+<div class="container">
+  <h3 class="component-header">
+    Permissions
+    <button type="button" class="btn custom-btn small-btn" data-toggle="modal" data-target="#EditPermission"
+            (click)="addPermission()" style="float: right;">Add Permission
+    </button>
+  </h3>
+  <div class="row no-side-margin">
+    <div class="col-12">
+      <form class="form-inline filter-section">
+        <div class="form-group">
+          <label>Filter:&nbsp;</label>
+          <select class="form-control form-control-sm" name="PermissionFilterStatus" #PermissionFilterStatus
+                  (change)="filterPermissionsByStatus(PermissionFilterStatus.value)">
+            <option value="">All permissions</option>
+            <option value="ACTIVE">Active permissions</option>
+            <option value="NOT_ACTIVE">Not Active permissions</option>
+          </select>
+        </div>
+      </form>
+      <div class="col-12 no-padding custom-table-box">
+        <table class="table table-responsive table-hover custom-table">
+          <thead class="thead-default">
+          <tr>
+            <th>Permission</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let permission of (allPermissions | permissionFilter: permissionStatusFilter)">
+            <td>{{permission.name}}</td>
+            <td>
+              <span class="badge badge-success" *ngIf="permission.active">Active</span>
+              <span class="badge badge-secondary" *ngIf="!permission.active">Not active</span>
+            </td>
+            <td>
+              <button type="button" data-toggle="modal" data-target="#EditPermission"
+                      (click)="readPermissionData(permission.id)" class="btn btn-light small-btn"
+                      title="Edit permission">
+                <span class="fa fa-edit"></span> Edit
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="!(allPermissions | permissionFilter: permissionStatusFilter).length">
+            <td colspan="3" class="empty-table-td">No results!</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditPermission">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ permissionEditMode ? 'Edit': 'Add New'}} permission</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row no-side-margin">
+          <form class="col-12 no-padding" [formGroup]="permissionForm" novalidate
+                (ngSubmit)="savePermission(permissionForm.value)">
+            <div class="form-group">
+              <input class="form-control" type="text" placeholder="Permission name" formControlName="name" required/>
+            </div>
+            <div class="form-group">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="permissionStatus" formControlName="active">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Activate permission</span>
+              </label>
+            </div>
+            <button type="submit" class="btn custom-btn" [disabled]="permissionForm.invalid">Save</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal" (click)="resetPermissionForm()">Close</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

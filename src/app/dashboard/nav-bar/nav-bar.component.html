@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-faded custom-nav-bar no-padding">
+  <button class="navbar-toggler navbar-toggler-right custom-nav-icon" type="button" data-toggle="collapse"
+          data-target="#dashboardNavDropdown" aria-controls="dashboardNavDropdown" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <i class="fa fa-bars" aria-hidden="true"></i>
+  </button>
+  <div class="navbar-brand no-padding">
+    <div class="custom-nav-brand">VCA</div>
+  </div>
+  <div class="collapse navbar-collapse" id="dashboardNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item custom-nav-item active">
+        <a class="nav-link" routerLink="/dashboard/roles" routerLinkActive="routeLinkActive">Roles</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/user-roles" routerLinkActive="routeLinkActive">User roles</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/permissions" routerLinkActive="routeLinkActive">Permissions</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/role-permissions" routerLinkActive="routeLinkActive">Role permissions</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/did" routerLinkActive="routeLinkActive">DID</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/user-dids" routerLinkActive="routeLinkActive">User DIDs</a>
+      </li>
+      <li class="nav-item custom-nav-item">
+        <a class="nav-link" routerLink="/dashboard/document-classification" routerLinkActive="routeLinkActive">Document classification</a>
+      </li>
+    </ul>
+    <button class="btn btn-danger btn-sm logout-btn" (click)="logout()">Logout</button>
+  </div>
+</nav>

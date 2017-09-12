@@ -1,0 +1,38 @@
+<div class="login-container">
+  <div class="login-box">
+    <img src="/assets/images/Logo.png" class="logo-img"/>
+    <div class="row no-side-margin" [ngSwitch]="LoginAction">
+      <form class="row no-side-margin login-form" *ngSwitchDefault (submit)="login()">
+        <div class="input-group login-input">
+          <div class="input-group-addon"><span class="fa fa-user"></span></div>
+          <input type="text" class="form-control" placeholder="Username" name="Username" [(ngModel)]="UserName">
+        </div>
+        <div class="input-group login-input">
+          <div class="input-group-addon"><span class="fa fa-lock"></span></div>
+          <input type="password" class="form-control" placeholder="Password" name="Password" [(ngModel)]="Password">
+        </div>
+        <button type="submit" class="btn login-btn">Login</button>
+      </form>
+
+      <forgot-password *ngSwitchCase="'ForgotPassword'"></forgot-password>
+      <create-account *ngSwitchCase="'CreateAccount'"></create-account>
+    </div>
+
+
+     <div class="row no-side-margin login-action-switch-box">
+      <label *ngIf="LoginAction && (LoginAction != 'Login')">
+        <input type="radio" name="LoginActions" class="login-action-switch" value="Login" [(ngModel)]="LoginAction"/>Login
+      </label>
+      <span *ngIf="LoginAction && (LoginAction != 'Login')">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+
+      <label *ngIf="LoginAction != 'ForgotPassword'">
+        <input type="radio" name="LoginActions" class="login-action-switch" value="ForgotPassword" [(ngModel)]="LoginAction"/>Forgot Password
+      </label>
+      <span *ngIf="LoginAction != 'ForgotPassword' && LoginAction != 'CreateAccount'">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+
+      <label *ngIf="LoginAction != 'CreateAccount'">
+        <input type="radio" name="LoginActions" class="login-action-switch" value="CreateAccount" [(ngModel)]="LoginAction"/>Create Account
+      </label>
+    </div>
+  </div>
+</div>

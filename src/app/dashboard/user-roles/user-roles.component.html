@@ -1,0 +1,76 @@
+<div class="container">
+  <h3 class="component-header">User roles</h3>
+  <div class="row no-side-margin">
+    <div class="col-12">
+      <div class="col-12 no-padding custom-accordian-box" id="userRolesAccordion" role="tablist">
+        <div class="card" *ngFor="let user of allUserRoles; let i=index">
+          <div class="card-header" role="tab" id="UserRole_{{i}}">
+            <h5 class="mb-0">
+              <a class="collapsed" class="accordian-link" data-toggle="collapse" href="#collapseUserRole_{{i}}"
+                 aria-expanded="false" [attr.aria-controls]="'collapseUserRole_'+i">
+                {{user.userName}}
+              </a>
+              <button type="button" data-toggle="modal" data-target="#EditUserRoles" class="btn btn-light small-btn" title="Edit user roles" (click)="editUserRoles(user)" style="float: right">
+                <span class="fa fa-edit"></span>
+              </button>
+            </h5>
+          </div>
+          <div id="collapseUserRole_{{i}}" class="collapse" [class.show]="i==0" role="tabpanel"
+               [attr.aria-labelledby]="'UserRole_'+i" data-parent="#userRolesAccordion">
+            <div class="card-body">
+              <h6 class="col-12 no-padding">All roles:</h6>
+              <div class="permission-box" *ngFor="let role of user.roleVoList">
+                {{role.roleName}}
+                <span style="margin-left: 15px">
+                    <span class="badge badge-success" *ngIf="role.active">Active</span>
+                    <span class="badge badge-secondary" *ngIf="!role.active">Not active</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditUserRoles">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit User roles</h5>
+      </div>
+      <div class="modal-body" *ngIf="selectedUser">
+        <div class="row no-side-margin">
+          <form class="col-12" novalidate>
+            <div class="form-group">
+              <label>User name</label>
+              <input class="form-control" type="text" [value]="selectedUser.userName" #RoleName readonly/>
+            </div>
+            <h6>Existing roles</h6>
+            <div class="form-group">
+              <small *ngIf="!selectedUser.roleVoList || !selectedUser.roleVoList.length">No roles!</small>
+              <div class="permission-box" *ngFor="let role of selectedUser.roleVoList">
+                {{role.roleName}}
+                <button class="text-btn delete-text-btn" (click)="removeRole(role)">
+                  <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <h6 *ngIf="remainingRoles.length">Add more roles: </h6>
+            <div class="form-group">
+              <div class="permission-box" *ngFor="let role of remainingRoles">
+                {{role.roleName}}
+                <button class="text-btn success-text-btn" (click)="addRole(role)">
+                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn custom-btn" (click)="saveUserRoles(selectedUser)">Save</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal" (click)="resetUserRoleForm()">Close</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

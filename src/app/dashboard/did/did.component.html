@@ -1,0 +1,159 @@
+<div class="row no-side-margin">
+  <h3 class="component-header col-12">
+    DID
+    <small>(Direct Inward Dialing)</small>
+    <button type="button" class="btn custom-btn small-btn" data-toggle="modal" data-target="#EditDID"
+            (click)="addNewDailData()" style="float: right;">Add new DID
+    </button>
+  </h3>
+  <div class="col-12">
+    <form class="form-inline filter-section">
+      <div class="form-group">
+        <label>Filter:&nbsp;</label>
+        <select class="form-control form-control-sm" name="RoleFilterStatus" #DidFilterStatus
+                (change)="filterDidByStatus(DidFilterStatus.value)">
+          <option value="">All DID numbers</option>
+          <option value="ACTIVE">Active DID numbers</option>
+          <option value="NOT_ACTIVE">Not Active DID numbers</option>
+        </select>
+      </div>
+    </form>
+    <div class="col-12 no-padding custom-table-box">
+      <table class="table table-responsive table-hover custom-table">
+        <thead class="thead-default">
+        <tr>
+          <th>DID Number</th>
+          <th>DID Type</th>
+          <th>Target Type</th>
+          <th>Forward To</th>
+          <th>Destination Device</th>
+          <th>Device Type</th>
+          <th>Location</th>
+          <th>Premium</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let dial of (allDidNumbers | didFilter: didStatusFilter)">
+          <td>{{dial.directInwardNumber ? dial.directInwardNumber : 'N/A'}}</td>
+          <td>{{dial.directInwardDialingType ? dial.directInwardDialingType : 'N/A'}}</td>
+          <td>{{dial.targetType ? dial.targetType : 'N/A'}}</td>
+          <td>{{dial.forwardToNumber ? dial.forwardToNumber : 'N/A'}}</td>
+          <td>{{dial.destinationDevice ? dial.destinationDevice : 'N/A'}}</td>
+          <td>{{dial.deviceType ? dial.deviceType : 'N/A'}}</td>
+          <td>
+            {{dial.city ? dial.city + ', ': ''}}
+            {{dial.state ? dial.state + ', ': ''}}
+            {{dial.country ? dial.country: ''}}
+            {{dial.countryCode ? '('+dial.countryCode+')': (dial.countryShortCode ? '('+dial.countryShortCode+')' :
+            '')}}
+            {{dial.zip ? ' - ' + dial.zip: ''}}
+          </td>
+          <td>
+            <span class="badge badge-danger" *ngIf="dial.premium">Premium</span>
+            <span class="badge badge-secondary" *ngIf="!dial.premium">Not premium</span>
+          </td>
+          <td>
+            <span class="badge badge-success" *ngIf="dial.active">Active</span>
+            <span class="badge badge-secondary" *ngIf="!dial.active">Not active</span>
+          </td>
+          <td>
+            <button type="button" data-toggle="modal" data-target="#EditDID" (click)="readDialData(dial.id)"
+                    class="btn btn-light small-btn" title="Edit dial">
+              <span class="fa fa-edit"></span>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!(allDidNumbers | didFilter: didStatusFilter).length">
+          <td colspan="10" class="empty-table-td">No results!</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditDID">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{didEditMode ? 'Edit' : 'Add'}} DID
+          <small>(Direct Inward Dialing)</small>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <form class="row no-side-margin" [formGroup]="didForm" (submit)="saveDid(didForm.value)">
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>DID Number</label>
+          <input type="text" class="form-control" formControlName="directInwardNumber"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>DID Type</label>
+          <input type="text" class="form-control" formControlName="directInwardDialingType"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>Target Type</label>
+          <input type="text" class="form-control" formControlName="targetType"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>Forward To</label>
+          <input type="text" class="form-control" formControlName="forwardToNumber"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>Destination Device</label>
+          <input type="text" class="form-control" formControlName="destinationDevice"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label>Device Type</label>
+          <input type="text" class="form-control" formControlName="deviceType"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" formControlName="premium">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Premium</span>
+          </label>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 form-group">
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" formControlName="active">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Activate</span>
+          </label>
+        </div>
+
+        <h5 class="col-12">Location</h5>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>City</label>
+          <input type="text" class="form-control" formControlName="city"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>State</label>
+          <input type="text" class="form-control" formControlName="state"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>Country</label>
+          <input type="text" class="form-control" formControlName="country"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>Zip code</label>
+          <input type="text" class="form-control" formControlName="zip"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>Country Code</label>
+          <input type="text" class="form-control" formControlName="countryCode"/>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label>Country Short Code</label>
+          <input type="text" class="form-control" formControlName="countryShortCode"/>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn custom-btn" [disabled]="didForm.invalid">Save</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal" (click)="resetDidForm()">Close</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="container">
+  <h3 class="component-header">
+    Role permissions
+  </h3>
+  <div class="row no-side-margin">
+    <div class="col-12">
+      <div class="col-12 no-padding custom-accordian-box" id="rolePermissionsAccordion" role="tablist">
+        <div class="card" *ngFor="let rolePermission of allRolePermissions; let i=index">
+          <div class="card-header" role="tab" id="RolePermission_{{i}}">
+            <h5 class="mb-0">
+              <a class="collapsed" class="accordian-link" data-toggle="collapse" href="#collapseRolePermission_{{i}}"
+                 aria-expanded="false" [attr.aria-controls]="'collapseRolePermission_'+i">
+                {{rolePermission.roleName}}
+              </a>
+              <button type="button" data-toggle="modal" data-target="#EditDocumentClassification" class="btn btn-light small-btn" title="Edit role permissions"
+                      (click)="editRolePermissions(rolePermission)" style="float: right">
+                <span class="fa fa-edit"></span>
+              </button>
+            </h5>
+          </div>
+          <div id="collapseRolePermission_{{i}}" class="collapse" [class.show]="i==0" role="tabpanel"
+               [attr.aria-labelledby]="'RolePermission_'+i" data-parent="#rolePermissionsAccordion">
+            <div class="card-body">
+              <h6 class="col-12 no-padding">All permissions:</h6>
+              <div class="permission-box" *ngFor="let permission of rolePermission.permissionVoList">
+                {{permission.name}}
+                <span style="margin-left: 15px">
+                    <span class="badge badge-success" *ngIf="permission.active">Active</span>
+                    <span class="badge badge-secondary" *ngIf="!permission.active">Not active</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EditDocumentClassification">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Role permissions</h5>
+      </div>
+      <div class="modal-body" *ngIf="selectedRole" >
+        <div class="row no-side-margin" style="border-left: 1px solid rgba(0,0,0,0.1)">
+          <form class="col-12" novalidate>
+            <div class="form-group">
+              <label>Role name</label>
+              <input class="form-control" type="text" [value]="selectedRole.roleName" #RoleName readonly/>
+            </div>
+            <h6>Existing permissions</h6>
+            <div class="form-group">
+              <small *ngIf="!selectedRole.permissionVoList.length">No permissions!</small>
+              <div class="permission-box" *ngFor="let permission of selectedRole.permissionVoList">
+                {{permission.name}}
+                <button class="text-btn delete-text-btn" (click)="removePermission(permission)">
+                  <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <h6 *ngIf="remainingPermissions.length">Add more permissions: </h6>
+            <div class="form-group">
+              <div class="permission-box" *ngFor="let permission of remainingPermissions">
+                {{permission.name}}
+                <button class="text-btn success-text-btn" (click)="addPermission(permission)">
+                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn custom-btn" (click)="saveRolePermissions(selectedRole)">Save</button>
+            <button type="button" class="btn btn-sm" data-dismiss="modal">Close
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
